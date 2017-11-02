@@ -24,44 +24,20 @@ var companySalesData = [
 
 function calculateSalesTax() {
 
-  var result = {
-    Telus: {
-      totalSales: 0,
-      totalTaxes: 0
-    },
-    Bombardier: {
-      totalSales: 0,
-      totalTaxes: 0
-    }
-  }
+  var result = {};
 
-  companySalesData.forEach(function(company){
-    var locationRevenue = 0;
+  companySalesData.forEach((company) => {
+    var transientRevenue = 0;
     for (var revenue of company.sales) {
-      result[company.name]['totalSales'] += revenue;
-      locationRevenue += revenue;
+      (!result[company.name]) ? result[company.name] = {totalSales: revenue, totalTaxes: 0} : result[company.name].totalSales += revenue;
+      transientRevenue += revenue;
     }
-    result[company.name]['totalTaxes'] += (locationRevenue * salesTaxRates[company.province]);
+  result[company.name]['totalTaxes'] += (transientRevenue * salesTaxRates[company.province]);
   });
-
   return result;
 }
 
 var taxSummary = calculateSalesTax();
 console.log(taxSummary);
 
-
-// APPROACH:
-
-// Problem: Given provincial tax rates and company sales data, return an object for each company that contains total sales and total taxes
-
-// Inputs: salesData object + taxRates object
-
-// Logic:
-// 1. Create objects (Telus and Bombardier with expected keys of output (equal to 0).
-// 2. Loop through the companysales data object calculating the total sales for each company/location and total tax
-// 3. += to the object.
-// 4. return object
-
-// Output: Company objects w/ 2 keys = total sales (Across all regions) + total taxes.
 
